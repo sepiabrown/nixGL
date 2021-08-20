@@ -35,9 +35,8 @@ let
       '';
     };
   top = rec {
-    /*
-    It contains the builder for different nvidia configuration, parametrized by
-    the version of the driver and sha256 sum of the driver installer file.
+    /* It contains the builder for different nvidia configuration, parametrized by
+       the version of the driver and sha256 sum of the driver installer file.
     */
     nvidiaPackages = { version, sha256 ? null }: rec {
       nvidiaDrivers = (linuxPackages.nvidia_x11.override { }).overrideAttrs
@@ -195,7 +194,7 @@ let
         runCommand "impure-nvidia-version-file" {
           # To avoid sharing the build result over time or between machine,
           # Add an impure parameter to force the rebuild on each access.
-          time = builtins.currentTime;
+          # time = builtins.currentTime;
           preferLocalBuild = true;
           allowSubstitutes = false;
         } "cp /proc/driver/nvidia/version $out || touch $out";
@@ -211,7 +210,7 @@ let
           versionMatch = builtins.match ".*Module  ([0-9.]+)  .*" data;
         in if versionMatch != null then builtins.head versionMatch else null;
 
-      autoNvidia = nvidiaPackages {version = nvidiaVersionAuto; };
+      autoNvidia = nvidiaPackages { version = nvidiaVersionAuto; };
     in rec {
       # The output derivation contains nixGL which point either to
       # nixGLNvidia or nixGLIntel using an heuristic.
