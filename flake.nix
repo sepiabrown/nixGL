@@ -12,9 +12,9 @@
           inherit system;
           config = { allowUnfree = true; };
         };
-        auto = (import ./. { inherit pkgs; }).auto;
       in rec {
-        packages = flattenTree (pkgs.recurseIntoAttrs auto);
-        defaultPackage = auto.nixGLDefault;
+        packages = flattenTree
+          (with pkgs; recurseIntoAttrs ((import ./. { inherit pkgs; }).auto));
+        defaultPackage = self.packages.${system}.nixGLDefault;
       });
 }
