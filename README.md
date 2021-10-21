@@ -27,7 +27,41 @@ $ nixVulkan program
 
 # Installation
 
-## nix-channel (Recommended)
+## nix flakes (Recommended)
+
+If you use NixOS, idk lol.
+
+If you use home-manager on non-NixOS, and manage your home configurations with a flake, add the nixGL input to `flake.nix`:
+
+```
+inputs = {
+  nixpkgs.url = "...";
+  home-manager.url = "...";
+  nixGL.url = "github:libjared/nixGL";
+};
+outputs = inputs@{ self, nixpkgs, home-manager, nixGL, ... }:
+{
+```
+
+Then in that same flake, add the desired nixGL package to `home.packages`:
+
+```
+myLaptop = inputs.home-manager.lib.homeManagerConfiguration {
+  system = "x86_64-linux";
+  ...
+
+  configuration = { config, pkgs, ... }:
+  {
+    ...
+
+    home.packages = [
+      inputs.nixGL.defaultPackage.${pkgs.system}
+    ];
+  };
+};
+```
+
+## nix-channel
 
 To get started,
 
