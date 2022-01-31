@@ -219,7 +219,8 @@ let
       # The output derivation contains nixGL which point either to
       # nixGLNvidia or nixGLIntel using an heuristic.
       nixGLDefault = if nvidiaVersionAuto != null then
-        nixGLCommon autoNvidia.nixGLNvidia
+        # nixGLCommon autoNvidia.nixGLNvidia
+        nixGLCommon nixGLIntel;
       else
         nixGLCommon nixGLIntel;
     } // autoNvidia;
