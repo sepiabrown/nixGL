@@ -83,38 +83,38 @@ let
       };
 
       # TODO: 32bit version? Not tested.
-      nixNvidiaWrapper = api:
-        writeExecutable {
-          name = "nix${api}Nvidia-${version}";
-          text = ''
-            #!${runtimeShell}
-            ${lib.optionalString (api == "Vulkan")
-            "export VK_LAYER_PATH=${vulkan-validation-layers}/share/vulkan/explicit_layer.d"}
+      ###nixNvidiaWrapper = api:
+      ###  writeExecutable {
+      ###    name = "nix${api}Nvidia-${version}";
+      ###    text = ''
+      ###      #!${runtimeShell}
+      ###      ${lib.optionalString (api == "Vulkan")
+      ###      "export VK_LAYER_PATH=${vulkan-validation-layers}/share/vulkan/explicit_layer.d"}
 
-              ${
-                lib.optionalString (api == "Vulkan")
-                "export VK_ICD_FILENAMES=${nvidiaLibsOnly}/share/vulkan/icd.d/nvidia_icd.json${
-                  lib.optionalString enable32bits
-                  ":${nvidiaLibsOnly.lib32}/share/vulkan/icd.d/nvidia_icd.json"
-                }:$VK_ICD_FILENAMES"
-              }
-              export LD_LIBRARY_PATH=${
-                lib.makeLibraryPath ([ libglvnd nvidiaLibsOnly ]
-                  ++ lib.optional (api == "Vulkan") vulkan-validation-layers
-                  ++ lib.optionals enable32bits [
-                    nvidiaLibsOnly.lib32
-                    pkgsi686Linux.libglvnd
-                  ])
-              }:''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-              "$@"
-          '';
-        };
-
-      # TODO: 32bit version? Not tested.
-      nixGLNvidia = nixNvidiaWrapper "GL";
+      ###        ${
+      ###          lib.optionalString (api == "Vulkan")
+      ###          "export VK_ICD_FILENAMES=${nvidiaLibsOnly}/share/vulkan/icd.d/nvidia_icd.json${
+      ###            lib.optionalString enable32bits
+      ###            ":${nvidiaLibsOnly.lib32}/share/vulkan/icd.d/nvidia_icd.json"
+      ###          }:$VK_ICD_FILENAMES"
+      ###        }
+      ###        export LD_LIBRARY_PATH=${
+      ###          lib.makeLibraryPath ([ libglvnd nvidiaLibsOnly ]
+      ###            ++ lib.optional (api == "Vulkan") vulkan-validation-layers
+      ###            ++ lib.optionals enable32bits [
+      ###              nvidiaLibsOnly.lib32
+      ###              pkgsi686Linux.libglvnd
+      ###            ])
+      ###        }:''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+      ###        "$@"
+      ###    '';
+      ###  };
 
       # TODO: 32bit version? Not tested.
-      nixVulkanNvidia = nixNvidiaWrapper "Vulkan";
+      ###nixGLNvidia = nixNvidiaWrapper "GL";
+
+      # TODO: 32bit version? Not tested.
+      ###nixVulkanNvidia = nixNvidiaWrapper "Vulkan";
     };
 
     nixGLIntel = writeExecutable {
